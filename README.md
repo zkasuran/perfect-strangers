@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <a href="{VIDEO_URL}">Watch the demo video</a>
+  <a href="https://youtu.be/rV6EUBt0Y5k">Watch the demo video</a>
 </p>
 
 <p align="center">
