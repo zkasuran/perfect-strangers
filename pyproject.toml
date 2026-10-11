@@ -1,0 +1,28 @@
+[project]
+name = "perfect-strangers"
+version = "1.0.0"
+description = "The GHZ pseudo-telepathy game: three sealed players win a game no classical team can, with no message sent."
+requires-python = ">=3.11"
+license = { text = "MIT" }
+# Qollab's in browser image ships qiskit 2.5.x; local verify runs 2.4.x. The
+# APIs used (quantum_info, primitives) are stable across both. Pinned to a tight
+# range rather than one exact build because the authoritative runtime is Qollab.
+dependencies = [
+    "qiskit[visualization]>=2.4,<3",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B", "SIM", "RUF"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["engine.py"]
+
+[[tool.mypy.overrides]]
+module = ["qiskit.*"]
+ignore_missing_imports = true

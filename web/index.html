@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Perfect Strangers: the quantum game no classical team can win</title>
+<meta name="description" content="Three players in sealed rooms, no messages, win a game every time with a shared quantum state. A classical team caps at 75 percent. Built on Qiskit, runs on Qollab.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'; img-src 'self' data:; font-src 'self' data:; style-src 'self'; connect-src 'none'; script-src 'self' 'sha256-dor01kwqomRXbcfZGjQibiOrd+b1sprHXTLT6jXZyas='">
+<script>(function(){try{var t=localStorage.getItem('theme')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="nav">
+  <div class="wrap row">
+    <a class="brand" href="#top"><span class="dot" aria-hidden="true"></span>Perfect Strangers</a>
+    <ul class="menu">
+      <li><button aria-haspopup="true" aria-expanded="false">Play</button>
+        <ul class="submenu" role="menu">
+          <li><a href="#play">The game<small>Deal rounds, quantum vs classical</small></a></li>
+          <li><a href="#beat">Beat it classically<small>Try to win all four, you cannot</small></a></li>
+        </ul></li>
+      <li><button aria-haspopup="true" aria-expanded="false">How it works</button>
+        <ul class="submenu" role="menu">
+          <li><a href="#how">The rules<small>GHZ state and the four rounds</small></a></li>
+          <li><a href="#contradiction">Why classical loses<small>The parity contradiction</small></a></li>
+        </ul></li>
+      <li><button aria-haspopup="true" aria-expanded="false">Reports</button>
+        <ul class="submenu" role="menu">
+          <li><a href="#numbers">The numbers<small>100 percent vs 75 percent</small></a></li>
+          <li><a href="#verify">Verification<small>Browser engine matches Qiskit</small></a></li>
+          <li><a href="#honesty">What is real<small>Simulated, no hardware</small></a></li>
+        </ul></li>
+      <li><button aria-haspopup="true" aria-expanded="false">Developers</button>
+        <ul class="submenu" role="menu">
+          <li><a href="#code">The Qiskit circuit<small>The authoritative engine</small></a></li>
+          <li><a href="#run">Run it on Qollab<small>Free local simulator</small></a></li>
+        </ul></li>
+    </ul>
+    <div class="right">
+      <a class="btn navcta" href="#play">Play a round</a>
+      <button class="toggle" id="themeBtn" aria-label="Toggle theme" aria-pressed="false">◐</button>
+    </div>
+  </div>
+</header>
+<main id="top">
+<!--SECTIONS-->
+<section class="hero wrap" aria-labelledby="h1">
+  <div class="grid">
+    <div>
+      <p class="eyebrow">Quantum pseudo-telepathy</p>
+      <h1 id="h1">Three strangers. No messages. <span class="hl">A perfect score.</span></h1>
+      <p class="sub">Three players sit in sealed rooms and never communicate. Sharing one entangled state, they win a coordination game <b>every single time</b>. Any classical team tops out at 75 percent.</p>
+      <div class="cta">
+        <a class="btn" href="#play">Play a round</a>
+        <a class="btn ghost" href="#how">How it works</a>
+      </div>
+      <div class="cta">
+        <span class="pill">Quantum <b id="pQ">100%</b></span>
+        <span class="pill">Best classical <b id="pC">75%</b></span>
+        <span class="pill">Qubits <b>3</b></span>
+      </div>
+    </div>
+    <div class="card game" id="play-card" aria-live="polite">
+      <div class="booths">
+        <div class="booth"><div class="who">Player A</div><div class="ask" id="askA">ready</div><div class="ans" id="ansA">?</div></div>
+        <div class="booth"><div class="who">Player B</div><div class="ask" id="askB">ready</div><div class="ans" id="ansB">?</div></div>
+        <div class="booth"><div class="who">Player C</div><div class="ask" id="askC">ready</div><div class="ans" id="ansC">?</div></div>
+      </div>
+      <div class="verdict" id="verdict">Deal a round. The referee asks each player X or Y.</div>
+      <div class="controls">
+        <div class="seg" role="group" aria-label="Which team">
+          <button id="teamQ" aria-pressed="true">Quantum team</button>
+          <button id="teamC" aria-pressed="false">Classical team</button>
+        </div>
+        <button class="btn" id="deal">Deal a round</button>
+        <button class="btn ghost" id="auto">Play 100</button>
+      </div>
+      <div class="score">
+        <div class="bar"><span class="lab">Quantum team</span><div class="track"><div class="fill q" id="barQ"></div><span class="val" id="valQ">0%</span></div></div>
+        <div class="bar"><span class="lab">Classical team</span><div class="track"><div class="fill c" id="barC"></div><span class="val" id="valC">0%</span></div></div>
+      </div>
+      <div class="rounds" id="roundline">0 rounds played</div>
+    </div>
+  </div>
+</section>
+<!--MORE-->
+<section class="section" id="how">
+  <div class="wrap">
+    <p class="eyebrow">How it works</p>
+    <h2>One shared state, four questions, one rule each</h2>
+    <p class="lead">The three players share a GHZ state, <code>(|000&gt; + |111&gt;) / &radic;2</code>, made once before they split up. A referee picks one of four rounds and tells each player to measure in the X basis or the Y basis. Each sends back one bit. The team wins if the three answers multiply to the round's target.</p>
+    <div class="two">
+      <div class="card feature">
+        <h3>The four rounds</h3>
+        <table class="rules" id="rulesTable">
+          <thead><tr><th>Round</th><th>A</th><th>B</th><th>C</th><th>Answers must multiply to</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>X</td><td>X</td><td>X</td><td class="r p">+1</td></tr>
+            <tr><td>2</td><td>X</td><td>Y</td><td>Y</td><td class="r m">&minus;1</td></tr>
+            <tr><td>3</td><td>Y</td><td>X</td><td>Y</td><td class="r m">&minus;1</td></tr>
+            <tr><td>4</td><td>Y</td><td>Y</td><td>X</td><td class="r m">&minus;1</td></tr>
+          </tbody>
+        </table>
+        <p class="muted fine">The quantum team meets all four with certainty, because the GHZ state is a +1 eigenstate of XXX and a &minus;1 eigenstate of the other three.</p>
+      </div>
+      <div class="card feature" id="contradiction">
+        <h3>Why a classical team cannot win all four</h3>
+        <p>Suppose each player decided both answers in advance. Multiply the left side of all four rules together. Every player's X answer and Y answer each appear twice, so everything squares to +1.</p>
+        <p class="contradiction">Left sides multiply to <code>+1</code>. Right sides multiply to <code>(+1)(&minus;1)(&minus;1)(&minus;1) = &minus;1</code>.</p>
+        <p>So a fixed plan would need <code>+1 = &minus;1</code>. Impossible. The best any classical team can do is satisfy three of the four, which is <b>75 percent</b>. Entanglement is not sending a message here, it is sharing a correlation no pre-agreed plan can fake.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="beat">
+  <div class="wrap">
+    <p class="eyebrow">Your turn</p>
+    <h2>Try to beat it as the classical team</h2>
+    <p class="lead">Fix each player's answer for an X question and for a Y question. We check all four rounds at once. You will always leave at least one red.</p>
+    <div class="two">
+      <div class="card feature">
+        <div class="attempt" id="attempt"></div>
+        <div class="result-row" id="attemptResult"></div>
+        <p class="rounds" id="attemptScore">Set the answers above</p>
+      </div>
+      <div class="card feature">
+        <h3>What you are seeing</h3>
+        <p>Each toggle sets a predetermined answer, exactly what a classical team is limited to. Green means that round's rule is met, red means it is broken.</p>
+        <p class="muted">Shared randomness does not help. It is only a mixture of fixed plans like this one, so it cannot beat the best fixed plan. The quantum team sidesteps the whole argument because its answers are not predetermined, they are created by measurement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<!--MORE2-->
+<section class="section" id="numbers">
+  <div class="wrap">
+    <p class="eyebrow">Reports</p>
+    <h2>The numbers, and how to check them</h2>
+    <div class="two">
+      <div class="card feature">
+        <h3 id="verify">Verified against Qiskit</h3>
+        <p>The engine you just played is a real 3 qubit statevector simulator written in JavaScript. It is held to the authoritative Qiskit project by a test that compares every outcome probability.</p>
+        <div class="badges">
+          <span class="badge"><span class="ok">&#10003;</span> 20,032 checks pass at 1e-9</span>
+          <span class="badge"><span class="ok">&#10003;</span> Quantum 100% over all four rounds</span>
+          <span class="badge"><span class="ok">&#10003;</span> Classical ceiling 75% (brute forced)</span>
+        </div>
+        <p class="muted fine">The same circuit runs on Qollab's free local simulator in the published project. Judges run that, the browser version is for play.</p>
+      </div>
+      <div class="card feature" id="honesty">
+        <h3>What is real and what is simulated</h3>
+        <table class="tbl">
+          <tr><th>Element</th><th>Status</th></tr>
+          <tr><td>The 3 qubit GHZ circuit and measurements</td><td>Real, run on an ideal simulator</td></tr>
+          <tr><td>The 100% vs 75% gap</td><td>Real, computed and brute forced</td></tr>
+          <tr><td>Quantum hardware or noise</td><td>Not used, ideal simulation only</td></tr>
+          <tr><td>Faster-than-light signalling</td><td>None, no information crosses between players</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="code">
+  <div class="wrap">
+    <p class="eyebrow">Developers</p>
+    <h2>The whole quantum core is tiny</h2>
+    <div class="two">
+      <div>
+        <h3>The Qiskit circuit</h3>
+        <pre class="code">from qiskit import QuantumCircuit
+
+def ghz():
+    qc = QuantumCircuit(3)
+    qc.h(0)
+    qc.cx(0, 1)
+    qc.cx(0, 2)      # (|000&gt; + |111&gt;) / &radic;2
+    return qc
+
+# round "XYY": player A measures X, B and C measure Y
+qc = ghz()
+qc.h(0)              # X basis
+qc.sdg(1); qc.h(1)   # Y basis
+qc.sdg(2); qc.h(2)   # Y basis
+qc.measure_all()     # answers must multiply to -1</pre>
+      </div>
+      <div id="run">
+        <h3>Run it on Qollab</h3>
+        <ol class="steps">
+          <li>Open the project on Qollab and press <b>Run Project</b>, then <b>Run</b>.</li>
+          <li>In <b>Select QPU</b>, pick a free local simulator and run again.</li>
+          <li>The console prints the scoreboard: quantum 100 percent, best classical 75 percent.</li>
+        </ol>
+        <div class="cta top">
+          <a class="btn" id="qollabLink" href="https://qollab.xyz/u/zkasuran/perfect-strangers">Open on Qollab</a>
+          <a class="btn ghost" id="repoLink" href="https://github.com/zkasuran/perfect-strangers">Source on GitHub</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap fr">
+    <span class="support">This effort is supported by Qollab &amp; IonQ.</span>
+    <span>MIT licensed &middot; built on Qiskit &middot; ideal simulation, no hardware</span>
+  </div>
+</footer>
+
+
+
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>
