@@ -34,6 +34,9 @@ const cmd = (method, params = {}) =>
 await cmd("Page.enable");
 await cmd("Runtime.enable");
 await cmd("Log.enable");
+const vw = +(process.argv[6] || 0);
+const vh = +(process.argv[7] || 0);
+if (vw) await cmd("Emulation.setDeviceMetricsOverride", { width: vw, height: vh, deviceScaleFactor: 2, mobile: false });
 await cmd("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: scheme }] });
 await cmd("Page.navigate", { url });
 await new Promise((res) => setTimeout(res, 3500)); // let modules load and the game render
@@ -46,7 +49,7 @@ const probe = await cmd("Runtime.evaluate", {
     verdict: (document.getElementById('verdict')||{}).textContent
   })`, returnByValue: true,
 });
-const shot = await cmd("Page.captureScreenshot", { format: "png", captureBeyondViewport: true });
+const shot = await cmd("Page.captureScreenshot", { format: "png", captureBeyondViewport: !vw });
 if (shot.data) writeFileSync(out, Buffer.from(shot.data, "base64"));
 
 console.log("scheme:", scheme, "render:", probe?.result?.value || JSON.stringify(probe));
