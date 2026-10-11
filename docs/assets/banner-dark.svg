@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400" role="img" aria-label="Perfect Strangers banner">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#4a9fe0" stop-opacity="0.30"/>
+      <stop offset="100%" stop-color="#4a9fe0" stop-opacity="0"/>
+    </radialGradient>
+    <style>
+      .t{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+    </style>
+  </defs>
+  <rect width="1280" height="400" fill="#0b0e14"/>
+  <rect width="1280" height="400" fill="url(#glow)"/>
+  <!-- entanglement motif, right side -->
+  <g transform="translate(995,200)">
+    <circle r="150" fill="url(#glow)"/>
+    <g stroke="#4a9fe0" stroke-width="3" opacity="0.7">
+      <line x1="0" y1="-96" x2="-83" y2="48"/>
+      <line x1="0" y1="-96" x2="83" y2="48"/>
+      <line x1="-83" y1="48" x2="83" y2="48"/>
+    </g>
+    <circle cx="0" cy="-96" r="26" fill="#4a9fe0"/>
+    <circle cx="-83" cy="48" r="26" fill="#0b0e14" stroke="#4a9fe0" stroke-width="3"/>
+    <circle cx="83" cy="48" r="26" fill="#0b0e14" stroke="#4a9fe0" stroke-width="3"/>
+    <text class="t" x="0" y="-90" text-anchor="middle" font-size="22" font-weight="700" fill="#06121f">A</text>
+    <text class="t" x="-83" y="54" text-anchor="middle" font-size="22" font-weight="700" fill="#4a9fe0">B</text>
+    <text class="t" x="83" y="54" text-anchor="middle" font-size="22" font-weight="700" fill="#4a9fe0">C</text>
+  </g>
+  <!-- text, left 60% -->
+  <text class="t" x="72" y="118" font-size="15" font-weight="700" letter-spacing="2" fill="#4a9fe0">QOLLAB &#215; IONQ GLOBAL HACKATHON</text>
+  <text class="t" x="70" y="196" font-size="62" font-weight="800" fill="#e6edf3">Perfect Strangers</text>
+  <text class="t" x="72" y="242" font-size="24" fill="#8b98a9">Three strangers. No messages. A perfect score.</text>
+  <g transform="translate(72,286)">
+    <rect width="150" height="40" rx="20" fill="#101a2b" stroke="#243049"/>
+    <text class="t" x="18" y="26" font-size="16" fill="#8b98a9">Quantum <tspan font-weight="800" fill="#e6edf3">100%</tspan></text>
+    <rect x="166" width="168" height="40" rx="20" fill="#141925" stroke="#232b3a"/>
+    <text class="t" x="184" y="26" font-size="16" fill="#8b98a9">Classical <tspan font-weight="800" fill="#e6edf3">75%</tspan></text>
+  </g>
+</svg>
